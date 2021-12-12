@@ -142,7 +142,7 @@ var weatherHTML = function (city, uv) {
     containerForecast.appendChild(ctn6);
 
     var ctn8 = document.createElement("div");         
-    
+
     ctn8.classList.add("d-flex");                     
 
 
@@ -204,4 +204,140 @@ var weatherHTML = function (city, uv) {
 
 // need to store city in local storage
 
+var storeCity = function(city){
 
+    var flag = false
+    if(storeData){
+        for(var i = 0; i < storeData.length; i++){
+            if(storeData[i] === city){
+                flag = true;
+            }
+        }
+        if(flag){
+            displayAlertMessage("The City: "+city+" already exists")
+            //return
+        }
+    }
+    if(!flag){
+        storeData.push(city);
+        localStorage.setItem("cities",JSON.stringify(storeData));
+    }
+    
+    loadCity();
+}
+var searchForDate9AM = function (str) {
+    var hour = str.split(" ")[1].split(":")[0];
+    var flag = false;
+    
+    if(hour === "09"){
+        flag = true;
+    }        
+    
+    return flag;
+};
+
+// creating array to store weather info 
+var createDataObject = function(list, position){
+
+    
+    if(weatherCondition.length)
+        weatherCondition = [];
+
+
+        var obj = {
+            dateT : formatDate(list[0].dt_txt),
+            humidity : list[0].main.humidity,
+            speed: list[0].wind.speed,
+            temp: list[0].main.temp,
+            icon : urlIcon + list[0].weather[0].icon + ".png",
+            lat : position.lat,
+            lon: position.lon
+        };
+
+        weatherCondition.push(obj);
+
+    for(var i=1; i<list.length; i++){
+
+        if(searchForDate9AM(list[i].dt_txt)){
+            obj = {
+                dateT : formatDate(list[i].dt_txt),
+                humidity : list[i].main.humidity,
+                speed: list[i].wind.speed,
+                temp: list[i].main.temp,
+                icon : urlIcon + list[i].weather[0].icon + ".png",
+                lat : position.lat,
+                lon: position.lon
+            };
+            weatherCondition.push(obj);
+        }
+    }
+
+};
+
+var displayAlertMessage = function(msg) {
+    alert(msg);
+};
+
+// need to grab info about weather from API
+
+var callApiFetch = function(city){
+
+    var url;
+    if (location.protocol === 'http:') {
+        url = 'http://api.openweathermap.org/data/2.5/forecast?appid=b262298fbe39ad30d243f31f6e1297bc&units=imperial&q='+city;
+     } else {
+        url = 'https://api.openweathermap.org/data/2.5/forecast?appid=b262298fbe39ad30d243f31f6e1297bc&units=imperial&q='+city;
+     }
+
+    fetch(url)
+
+    .then(function(weatherResponse) {
+        return weatherResponse.json();
+     })
+    .then(function(weatherResponse) {
+
+        if (weatherResponse.cod != "200") {
+            
+            displayAlertMessage("Unable to find "+ city +" in OpenWeathermap.org");
+
+            return;
+        } else {
+            createDataObject(weatherResponse.list, weatherResponse.city.coord);
+            }
+
+            var url1;
+        if (location.protocol === 'http:') {
+            url1 = 'http://api.openweathermap.org/data/2.5/uvi?appid=b262298fbe39ad30d243f31f6e1297bc&lat='+weatherCondition[0].lat+'&lon='+weatherCondition[0].lon;
+        } else {
+            url1 = 'https://api.openweathermap.org/data/2.5/uvi?appid=b262298fbe39ad30d243f31f6e1297bc&lat='+weatherCondition[0].lat+'&lon='+weatherCondition[0].lon;
+        }
+
+        fetch(url1)
+
+        .then(function(uvResponse) {
+          return uvResponse.json();
+        })
+        .then(function(uvResponse) {
+
+          if (!uvResponse) {   
+            displayAlertMessage('OpenWeathermap.org could not find anything for latitude and Longitude');
+
+            return;
+          } else {
+
+            saveCity(city);
+
+            // send to hTML
+            weatherHTML(city, uvResponse.value);
+          }
+        })
+    })
+
+    .catch(function(error) {
+
+        
+
+        displayAlertMessage("Unable to connect to OpenWeathermap.org");
+        return;
+      });
+};
