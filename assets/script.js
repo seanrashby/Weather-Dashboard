@@ -284,9 +284,9 @@ var callApiFetch = function(city){
 
     var url;
     if (location.protocol === 'http:') {
-        url = 'http://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&units=imperial&q='+city;
+        url = 'http://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&q='+city;
      } else {
-        url = 'https://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&units=imperial&q='+city;
+        url = 'https://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&q='+city;
      }
 
     fetch(url)
@@ -309,7 +309,7 @@ var callApiFetch = function(city){
         if (location.protocol === 'http:') {
             url1 = 'http://api.openweathermap.org/data/2.5/uvi?appid=f03da6658f72e2e0e0e2d12e07dcc689&lat='+weatherCondition[0].lat+'&lon='+weatherCondition[0].lon;
         } else {
-            url1 = 'https://api.openweathermap.org/data/2.5/uvi?appid=f03da6658f72e2e0e0e2d12e07dcc689&lat='+weatherCondition[0].lat+'&lon='+weatherCondition[0].lon;
+            url1 = 'https://api.openweathermap.org/data/2.5/uni?appid=f03da6658f72e2e0e0e2d12e07dcc689&lat='+weatherCondition[0].lat+'&lon='+weatherCondition[0].lon;
         }
 
         fetch(url1)
