@@ -60,7 +60,7 @@ $(document).on("click", ".list-group-item", function(event) {
     callApiFetch(city);
 });
 
-var cleaningElement = function(element){
+var cleanElement = function(element){
     element.innerHTML = "";
 };
 
@@ -88,9 +88,9 @@ var findUV = function(uv){
 
 var weatherHTML = function (city, uv) {
 
-    cleaningElement(containerCurrent);
+    cleanElement(containerCurrent);
 
-    cleaningElement(containerForecast); 
+    cleanElement(containerForecast); 
 
     var ctn1 = document.createElement("div"); 
 
@@ -341,3 +341,27 @@ var callApiFetch = function(city){
         return;
       });
 };
+
+var search = function(event){
+    event.preventDefault();
+
+    //grabbing input value
+    var inputElement = document.querySelector("#searchCity");
+    var textInput = inputElement.value.trim();
+
+    if(inputElement.value === ""){
+        alert("Weather Dashbord\n   You must enter a City");
+        return;
+    }
+    
+    else{
+   
+        callApiFetch(textInput);
+
+    }
+
+};
+
+start();
+
+btn.addEventListener("click", search);
