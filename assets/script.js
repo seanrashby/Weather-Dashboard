@@ -21,7 +21,7 @@ var urlIcon;
  }
     
 // doing weather conditions for cities 
-var weatherConditions = [];
+var weatherCondition = [];
 
 function start(){
     loadCity();
@@ -86,6 +86,13 @@ var findUV = function(uv){
                 return bgColor;
 };
 
+// var converTemp = function(temp){
+//     return (Math.floor((parseFloat(temp) -32) * (5/9))).toString();
+// };
+
+// var convertWSpeed = function(speed){
+//     return (Math.floor(parseFloat(speed)  * (1.609)).toString();
+
 var weatherHTML = function (city, uv) {
 
     cleanElement(containerCurrent);
@@ -118,9 +125,9 @@ var weatherHTML = function (city, uv) {
 
     ctn3.classList.add("col-12");
 
-    ctn3.innerHTML =    "<p>Temperature: " + weatherCondition[0].temp + " °F / " + converTemp(weatherCondition[0].temp) + " °C</p>" + 
+    ctn3.innerHTML =    "<p>Temperature: " + weatherCondition[0].temp + " °F / " + weatherCondition[0].temp + 
                         "<p>Humidity: " + weatherCondition[0].humidity + "% </p>" +
-                        "<p>Wind Speed: " + weatherCondition[0].speed + " MPH / " + convertWSpeed(weatherCondition[0].speed) + " KPH </p>" +
+                        "<p>Wind Speed: " + weatherCondition[0].speed + " MPH / " + weatherCondition[0].speed +
                         "<p>UV index: <span class='text-white "+ findUV(uv) + "'>" + uv + "</span></p>";
     containerCurrent.appendChild(ctn1);
     containerCurrent.appendChild(ctn2);
@@ -235,6 +242,13 @@ var searchForDate9AM = function (str) {
     
     return flag;
 };
+var formatDate = function(date){
+    return date; 
+}
+// saved to local storage
+var saveCity = function(city){
+    //  
+}
 
 // creating array to store weather info 
 var createDataObject = function(list, position){
@@ -284,9 +298,9 @@ var callApiFetch = function(city){
 
     var url;
     if (location.protocol === 'http:') {
-        url = 'http://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&q='+city;
+        url = 'http://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&units=imperial&q='+city;
      } else {
-        url = 'https://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&q='+city;
+        url = 'https://api.openweathermap.org/data/2.5/forecast?appid=f03da6658f72e2e0e0e2d12e07dcc689&units=imperial&q='+city;
      }
 
     fetch(url)
@@ -325,7 +339,7 @@ var callApiFetch = function(city){
             return;
           } else {
 
-            saveCity(city);
+            storeCity(city);
 
             // send to hTML
             weatherHTML(city, uvResponse.value);
@@ -335,7 +349,7 @@ var callApiFetch = function(city){
 
     .catch(function(error) {
 
-        
+        console.log(error);
 
         displayAlertMessage("Unable to connect to OpenWeathermap.org");
         return;
