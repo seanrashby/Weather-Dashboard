@@ -1,3 +1,7 @@
+Weather Dashboard: a dashboard that allows you to search cities and check out weather forecasts, humidity, wind speed etc with an OpenWeather API fetch using Javascript, HTML and CSS. 
+
+
+
 User Story
 AS A traveler
 I WANT to see the weather outlook for multiple cities
@@ -17,3 +21,7 @@ THEN I am again presented with current and future conditions for that city
 Mock-Up
 The following image shows the web application's appearance and functionality:
 ![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Seattle.](assets/Screenshot.png)
+
+![The weather app includes a five day forecast](assets/Fiveday.png)
+
+Link [Deployed application](https://seanrashby.github.io/Weather-Dashboard/)
